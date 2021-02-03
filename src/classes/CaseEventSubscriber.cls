@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Rajesh Ramachandran
  * @group             : 
- * @last modified on  : 01-28-2021
+ * @last modified on  : 02-03-2021
  * @last modified by  : Rajesh Ramachandran
  * Modifications Log 
  * Ver   Date         Author                Modification
@@ -11,8 +11,9 @@
 public  class CaseEventSubscriber extends PESubscriber{
 
     //constructor to pass events. Every subscriber class should include this
+    //pass an integer which indicates upper threshold of events for processing
     public CaseEventSubscriber(List<SObject> lsEvents){
-        super(lsEvents);
+        super(lsEvents, 20);
     }
 
     //method to override in the subscriber class where the event will be process according to business logic

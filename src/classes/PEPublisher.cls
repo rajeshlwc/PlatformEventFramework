@@ -2,7 +2,7 @@
  * @description       : The PE Publisher class which is parent class with all framework code to publish platform event and create log records.
  * @author            : Rajesh Ramachandran
  * @group             : 
- * @last modified on  : 01-28-2021
+ * @last modified on  : 02-03-2021
  * @last modified by  : Rajesh Ramachandran
  * Modifications Log 
  * Ver   Date         Author                Modification
@@ -47,6 +47,7 @@ public virtual class PEPublisher {
                 if (!sr.isSuccess()){
                     for (Database.Error err : sr.getErrors()){
                         System.debug('Error in publishing event ' + err.getMessage());
+                        PEExceptionHandler.LogError(err.getMessage(), 'PEPublisher', '', UserInfo.getUserName());
                     }
                 }
             }
