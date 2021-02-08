@@ -165,6 +165,28 @@
         <visibleLines>3</visibleLines>
     </fields>
     <fields>
+        <fullName>PE_Name__c</fullName>
+        <description>Name of the Platform event</description>
+        <externalId>false</externalId>
+        <label>PE Name</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Retry_PE__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Set the flag to true to retry the PE</description>
+        <externalId>false</externalId>
+        <label>Retry PE</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Status__c</fullName>
         <externalId>false</externalId>
         <label>Status</label>
@@ -208,6 +230,8 @@
         <columns>Status__c</columns>
         <columns>Unique_Id__c</columns>
         <columns>PE_JSON__c</columns>
+        <columns>PE_Name__c</columns>
+        <columns>Retry_PE__c</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>

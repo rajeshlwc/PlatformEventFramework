@@ -2,7 +2,7 @@
  * @description       : The PE Publisher class which is parent class with all framework code to publish platform event and create log records.
  * @author            : Rajesh Ramachandran
  * @group             : 
- * @last modified on  : 02-03-2021
+ * @last modified on  : 02-08-2021
  * @last modified by  : Rajesh Ramachandran
  * Modifications Log 
  * Ver   Date         Author                Modification
@@ -33,10 +33,13 @@ public virtual class PEPublisher {
         for (Sobject so : newPEs){
             i++;
             //assign unique Id field with a unique identifier
-            so.put('Unique_Id__c',so.getSObjectType().getDescribe().getName() + '-' + Datetime.now() + '-' + i);
+            String peName = so.getSObjectType().getDescribe().getName();
+            so.put('Unique_Id__c',peName + '-' + Datetime.now() + '-' + i);
+            Boolean retryFlag = PE_Setting__c.getInstance().get('Skip_Retry__c')==null?true:((String)PE_Setting__c.getInstance().get('Skip_Retry__c')).contains(peName);
             //create logger record if skip logging flag custom setting is not set to true
             if (skipLogging == false || skipLogging == null){
-                PE_Logger__c pel = new PE_Logger__c(Unique_Id__c = (String)so.get('Unique_Id__c'),Status__c = 'Pending', PE_JSON__c = JSON.serialize(so));
+                System.debug(peName);
+                PE_Logger__c pel = new PE_Logger__c(Unique_Id__c = (String)so.get('Unique_Id__c'),Status__c = 'Pending', PE_JSON__c = JSON.serialize(so),PE_Name__c=peName,Retry_PE__c=retryFlag);
                 loggerList.add(pel);    
             }
         }

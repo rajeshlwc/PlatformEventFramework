@@ -2,7 +2,7 @@
  * @description       : Subscriber class with framework to update logger record. It will call ProcessEvents method
  * @author            : Rajesh Ramachandran
  * @group             : 
- * @last modified on  : 02-03-2021
+ * @last modified on  : 02-08-2021
  * @last modified by  : Rajesh Ramachandran
  * Modifications Log 
  * Ver   Date         Author                Modification
@@ -79,7 +79,7 @@ public virtual class PESubscriber {
                 //create logger records for the items in pending status
                 if(pendingIds.get((String)event.get('unique_id__c')) != null) {
                     //log record to Logger object
-                    PE_Logger__c pel = new PE_Logger__c(Id=pendingIds.get((String)event.get('unique_id__c')),status__c = 'Completed');
+                    PE_Logger__c pel = new PE_Logger__c(Id=pendingIds.get((String)event.get('unique_id__c')),status__c = 'Completed', retry_PE__c=false);
                     updLogList.add(pel);
                 }                            
             }
