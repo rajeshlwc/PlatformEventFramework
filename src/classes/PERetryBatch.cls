@@ -15,8 +15,11 @@ public without sharing class PERetryBatch implements Database.Batchable<SObject>
 
     //retry events in the last day
     public PERetryBatch(){
-        Datetime lastFifteen = Datetime.now().addMinutes(-15);        
-        peQuery = 'Select id, unique_id__c,PE_JSON__c,PE_Name__c,Retry_PE__c from PE_Logger__c where Retry_PE__c = true and status__c = \'Pending\' and Retry_Time__c > ' + lastFifteen;
+        Datetime lastFifteen = Datetime.now().addMinutes(-15);  
+        String sLastFifteen = lastFifteen.formatGmt('yyyy-MM-dd\'T\'HH:mm:ss\'Z\''); 
+        Datetime currentTime = Datetime.now();
+        String sCurrTime = currentTime.formatGmt('yyyy-MM-dd\'T\'HH:mm:ss\'Z\'');
+        peQuery = 'Select id, unique_id__c,PE_JSON__c,PE_Name__c,Retry_PE__c from PE_Logger__c where Retry_PE__c = true and status__c = \'Pending\' and (Retry_Time__c > ' + sLastFifteen + ' and Retry_Time__c < ' + sCurrTime + ')';
         System.debug(peQuery);
     }    
 
