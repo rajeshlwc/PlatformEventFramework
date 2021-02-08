@@ -187,6 +187,15 @@
         <type>Checkbox</type>
     </fields>
     <fields>
+        <fullName>Retry_Time__c</fullName>
+        <externalId>false</externalId>
+        <label>Retry Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
         <fullName>Status__c</fullName>
         <externalId>false</externalId>
         <label>Status</label>
@@ -232,6 +241,7 @@
         <columns>PE_JSON__c</columns>
         <columns>PE_Name__c</columns>
         <columns>Retry_PE__c</columns>
+        <columns>Retry_Time__c</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>

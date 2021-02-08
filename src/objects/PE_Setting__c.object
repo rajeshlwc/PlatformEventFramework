@@ -18,14 +18,6 @@
         <trackTrending>false</trackTrending>
         <type>TextArea</type>
     </fields>
-    <fields>
-        <fullName>Skip_Retry__c</fullName>
-        <externalId>false</externalId>
-        <label>Skip Retry</label>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>TextArea</type>
-    </fields>
     <label>PE Setting</label>
     <visibility>Public</visibility>
 </CustomObject>

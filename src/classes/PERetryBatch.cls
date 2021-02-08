@@ -15,7 +15,9 @@ public without sharing class PERetryBatch implements Database.Batchable<SObject>
 
     //retry events in the last day
     public PERetryBatch(){
-        peQuery = 'Select id, unique_id__c,PE_JSON__c,PE_Name__c,Retry_PE__c from PE_Logger__c where Retry_PE__c = true and status__c = \'Pending\' and Createddate = last_n_days:1';
+        Datetime lastFifteen = Datetime.now().addMinutes(-15);        
+        peQuery = 'Select id, unique_id__c,PE_JSON__c,PE_Name__c,Retry_PE__c from PE_Logger__c where Retry_PE__c = true and status__c = \'Pending\' and Retry_Time__c > ' + lastFifteen;
+        System.debug(peQuery);
     }    
 
     public Database.QueryLocator start(Database.BatchableContext bc){
@@ -24,6 +26,7 @@ public without sharing class PERetryBatch implements Database.Batchable<SObject>
 
     public void execute(Database.BatchableContext bc, List<PE_Logger__c> records){
 
+        //call the retry publisher
         if (records != null && records.size() > 0){
             PERetryPublisher retryCls = new PERetryPublisher(records);
             retryCls.run();
@@ -32,7 +35,8 @@ public without sharing class PERetryBatch implements Database.Batchable<SObject>
         for (PE_Logger__c pel : records){
             pel.retry_pe__c = false;
         }
-        update records;
+        if (records != null && records.size() > 0)
+            update records;
 
     }
 

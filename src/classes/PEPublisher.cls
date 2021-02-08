@@ -30,16 +30,29 @@ public virtual class PEPublisher {
         //generate the logger record and add unique id on the platform event
         List<PE_Logger__c> loggerList = new List<PE_Logger__c>();
         Integer i = 100;
+        //collect retry metadata data
+        List<PE_Retry__mdt> lsRetry = [select id,label,developername,Retry_PE__c,Retry_Interval__c from PE_Retry__mdt limit 100];
+        Map<String,PE_Retry__mdt> mapRetry = new Map<String, PE_Retry__mdt>();
+        for (PE_Retry__mdt prm : lsRetry){
+            mapRetry.put(prm.label,prm);
+        }
         for (Sobject so : newPEs){
             i++;
             //assign unique Id field with a unique identifier
             String peName = so.getSObjectType().getDescribe().getName();
             so.put('Unique_Id__c',peName + '-' + Datetime.now() + '-' + i);
-            Boolean retryFlag = PE_Setting__c.getInstance().get('Skip_Retry__c')==null?true:((String)PE_Setting__c.getInstance().get('Skip_Retry__c')).contains(peName);
+            //check if the platform event has to be retried and its time to retry
+            Boolean retryFlag = false;
+            Integer retryInterval = 15;
+            if (mapRetry != null && mapRetry.get(peName) != null){
+                retryFlag = mapRetry.get(peName).get('Retry_PE__c')==null?false:(Boolean)mapRetry.get(peName).get('Retry_PE__c');
+                retryInterval = mapRetry.get(peName).get('Retry_Interval__c') == null? Integer.valueOf('15') :Integer.valueOf(mapRetry.get(peName).get('Retry_Interval__c'));    
+            }
+            Datetime retryTime = Datetime.now().addMinutes(retryInterval);
             //create logger record if skip logging flag custom setting is not set to true
             if (skipLogging == false || skipLogging == null){
                 System.debug(peName);
-                PE_Logger__c pel = new PE_Logger__c(Unique_Id__c = (String)so.get('Unique_Id__c'),Status__c = 'Pending', PE_JSON__c = JSON.serialize(so),PE_Name__c=peName,Retry_PE__c=retryFlag);
+                PE_Logger__c pel = new PE_Logger__c(Unique_Id__c = (String)so.get('Unique_Id__c'),Status__c = 'Pending', PE_JSON__c = JSON.serialize(so),PE_Name__c=peName,Retry_PE__c=retryFlag,Retry_Time__c=retryTime);
                 loggerList.add(pel);    
             }
         }
